@@ -22,7 +22,11 @@ const API_URL = import.meta.env.VITE_API_URL || ''
     }
   }, [])
 
-  useEffect(() => { fetchMe() }, [fetchMe])
+  // Don't auto-fetch on mount — backend doesn't have sessions
+  // User state is set during login and persists in memory
+  useEffect(() => {
+    setLoading(false)
+  }, [])
 
   const login = async (firstName, lastName, password) => {
     const res = await fetch(`${API_URL}/api/login`, {
