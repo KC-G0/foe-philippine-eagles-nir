@@ -4,10 +4,27 @@ import { createContext, useContext, useState, useEffect, useCallback } from 'rea
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(() => {
+    // Restore auth from localStorage on mount
+    try {
+      const saved = localStorage.getItem('foe_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
   const [loading, setLoading] = useState(true)
 
-const API_URL = import.meta.env.VITE_API_URL || ''
+  const API_URL = import.meta.env.VITE_API_URL || ''
+
+  // Persist user to localStorage whenever it changes
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('foe_user', JSON.stringify(user));
+    } else {
+      localStorage.removeItem('foe_user');
+    }
+  }, [user])
 
   const fetchMe = useCallback(async () => {
     try {

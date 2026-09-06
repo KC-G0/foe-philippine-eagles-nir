@@ -27,7 +27,7 @@ export default function Members() {
 
   const filtered = members.filter(m => {
     const search = filter.toLowerCase()
-    const fullName = `${m.first_name} ${m.last_name}`.toLowerCase()
+    const fullName = `${m.first_name || ''} ${m.last_name || ''}`.toLowerCase()
     const nameMatch = fullName.includes(search)
     const roleMatch = !roleFilter || m.location === roleFilter
     return nameMatch && roleMatch
