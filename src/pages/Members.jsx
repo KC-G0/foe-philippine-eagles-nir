@@ -16,7 +16,7 @@ export default function Members() {
       navigate('/login-page', { state: { from: '/members-page' } })
       return
     }
-    fetch('/api/members', { credentials: 'include' })
+    fetch(`${import.meta.env.VITE_API_URL || ''}/api/members`, { credentials: 'include' })
       .then(r => r.json())
       .then(d => setMembers(d.members))
       .catch(console.error)

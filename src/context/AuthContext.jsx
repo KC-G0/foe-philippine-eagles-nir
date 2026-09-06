@@ -7,9 +7,11 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
+const API_URL = import.meta.env.VITE_API_URL || ''
+
   const fetchMe = useCallback(async () => {
     try {
-      const res = await fetch('/api/auth/me', { credentials: 'include' })
+      const res = await fetch(`${API_URL}/api/auth/me`, { credentials: 'include' })
       if (!res.ok) throw new Error()
       const data = await res.json()
       setUser(data.member)
@@ -23,7 +25,7 @@ export function AuthProvider({ children }) {
   useEffect(() => { fetchMe() }, [fetchMe])
 
   const login = async (firstName, lastName, password) => {
-    const res = await fetch('/api/login', {
+    const res = await fetch(`${API_URL}/api/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
@@ -36,7 +38,7 @@ export function AuthProvider({ children }) {
   }
 
   const logout = async () => {
-    await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' })
+    await fetch(`${API_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' })
     setUser(null)
   }
 
