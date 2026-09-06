@@ -22,15 +22,15 @@ export function AuthProvider({ children }) {
 
   useEffect(() => { fetchMe() }, [fetchMe])
 
-  const login = async (memberId, password) => {
+  const login = async (firstName, lastName, password) => {
     const res = await fetch('/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify({ member_id: memberId, password })
+      body: JSON.stringify({ first_name: firstName, last_name: lastName, password })
     })
     const data = await res.json()
-    if (!res.ok) throw new Error(data.message || 'Login failed')
+    if (!res.ok || !data.success) throw new Error(data.message || 'Login failed')
     setUser(data.member)
     return data.member
   }

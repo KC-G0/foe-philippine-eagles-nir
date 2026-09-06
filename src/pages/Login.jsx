@@ -8,7 +8,8 @@ export default function Login() {
   const { login } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
-  const [memberId, setMemberId] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -20,7 +21,7 @@ export default function Login() {
     setError('')
     setLoading(true)
     try {
-      await login(Number(memberId), password)
+      await login(firstName, lastName, password)
       navigate(from, { replace: true })
     } catch (err) {
       setError(err.message)
@@ -59,14 +60,26 @@ export default function Login() {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label htmlFor="memberId" className="block text-white/70 text-sm mb-2">Member ID</label>
+            <label htmlFor="firstName" className="block text-white/70 text-sm mb-2">First Name</label>
             <input
-              type="number"
-              id="memberId"
-              value={memberId}
-              onChange={e => setMemberId(e.target.value)}
+              type="text"
+              id="firstName"
+              value={firstName}
+              onChange={e => setFirstName(e.target.value)}
               className="input-field w-full"
-              placeholder="Enter your member ID (e.g. 1)"
+              placeholder="Enter your first name"
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="lastName" className="block text-white/70 text-sm mb-2">Last Name</label>
+            <input
+              type="text"
+              id="lastName"
+              value={lastName}
+              onChange={e => setLastName(e.target.value)}
+              className="input-field w-full"
+              placeholder="Enter your last name"
               required
             />
           </div>
