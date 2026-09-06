@@ -27,12 +27,13 @@ export default function Members() {
 
   const filtered = members.filter(m => {
     const search = filter.toLowerCase()
-    const nameMatch = m.name.toLowerCase().includes(search)
-    const roleMatch = !roleFilter || m.role === roleFilter
+    const fullName = `${m.first_name} ${m.last_name}`.toLowerCase()
+    const nameMatch = fullName.includes(search)
+    const roleMatch = !roleFilter || m.location === roleFilter
     return nameMatch && roleMatch
   })
 
-  const roles = [...new Set(members.map(m => m.role))]
+  const roles = [...new Set(members.map(m => m.location).filter(Boolean))]
 
   return (
     <div className="py-16 px-4 relative">
@@ -85,7 +86,6 @@ export default function Members() {
               <thead className="bg-white/5">
                 <tr>
                   <th className="px-6 py-4 text-left text-gold-500 font-semibold">Name</th>
-                  <th className="px-6 py-4 text-left text-gold-500 font-semibold">Role/Title</th>
                   <th className="px-6 py-4 text-left text-gold-500 font-semibold">Location</th>
                 </tr>
               </thead>
@@ -98,8 +98,7 @@ export default function Members() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: idx * 0.02 }}
                   >
-                    <td className="px-6 py-4 text-white font-medium">{member.name}</td>
-                    <td className="px-6 py-4 text-white/70">{member.role}</td>
+                    <td className="px-6 py-4 text-white font-medium">{member.first_name} {member.last_name}</td>
                     <td className="px-6 py-4 text-white/70">{member.location || 'Not specified'}</td>
                   </motion.tr>
                 ))}

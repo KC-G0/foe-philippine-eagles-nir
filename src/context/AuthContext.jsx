@@ -10,8 +10,9 @@ export function AuthProvider({ children }) {
   const fetchMe = useCallback(async () => {
     try {
       const res = await fetch('/api/auth/me', { credentials: 'include' })
+      if (!res.ok) throw new Error()
       const data = await res.json()
-      setUser(data.user)
+      setUser(data.member)
     } catch {
       setUser(null)
     } finally {
@@ -21,17 +22,17 @@ export function AuthProvider({ children }) {
 
   useEffect(() => { fetchMe() }, [fetchMe])
 
-  const login = async (name, password) => {
-    const res = await fetch('/api/auth/login', {
+  const login = async (memberId, password) => {
+    const res = await fetch('/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify({ name, password })
+      body: JSON.stringify({ member_id: memberId, password })
     })
     const data = await res.json()
-    if (!res.ok) throw new Error(data.error || 'Login failed')
-    setUser(data.user)
-    return data.user
+    if (!res.ok) throw new Error(data.message || 'Login failed')
+    setUser(data.member)
+    return data.member
   }
 
   const logout = async () => {
