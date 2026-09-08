@@ -9,5 +9,8 @@ export default defineConfig({
     proxy: {
       '/api': 'http://localhost:4000'
     }
+  },
+  define: {
+    'import.meta.env.VITE_API_URL': JSON.stringify('https://foe-philippine-eagles-nir-backend.onrender.com')
   }
 })
