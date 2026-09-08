@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext'
 import { motion } from 'framer-motion'
 
 export default function Members() {
-  const { user, loading } = useAuth()
+  const { user, loading, initialized } = useAuth()
   const navigate = useNavigate()
   const [members, setMembers] = useState([])
   const [filter, setFilter] = useState('')
@@ -22,7 +22,7 @@ export default function Members() {
       .catch(console.error)
   }, [user, loading, navigate])
 
-  if (loading) return <div className="py-20 text-center text-white/60">Loading...</div>
+  if (loading || !initialized) return <div className="py-20 text-center text-white/60">Loading...</div>
   if (!user) {
     navigate('/login-page', { state: { from: '/members-page' } })
     return null

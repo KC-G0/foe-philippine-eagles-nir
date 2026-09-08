@@ -4,56 +4,23 @@ import { createContext, useContext, useState, useEffect, useCallback } from 'rea
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(() => {
-    // Restore auth from localStorage on mount
-    try {
-      const saved = localStorage.getItem('foe_user');
-      return saved ? JSON.parse(saved) : null;
-    } catch {
-      return null;
-    }
-  });
+  const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [initialized, setInitialized] = useState(false)
 
   const API_URL = import.meta.env.VITE_API_URL || ''
 
-  // Persist user to localStorage whenever it changes
+  // Restore auth from localStorage on mount
   useEffect(() => {
-    if (user) {
-      localStorage.setItem('foe_user', JSON.stringify(user));
-    } else {
-      localStorage.removeItem('foe_user');
-    }
-  }, [user])
-
-  const fetchMe = useCallback(async () => {
     try {
-      const res = await fetch(`${API_URL}/api/auth/me`, { credentials: 'include' })
-      if (!res.ok) throw new Error()
-      const data = await res.json()
-      setUser(data.member)
-    } catch {
-      setUser(null)
-    } finally {
-      setLoading(false)
-    }
-  }, [])
-
-  // On mount, check if we have saved user
-  useEffect(() => {
-    const saved = localStorage.getItem('foe_user');
-    if (saved && !user) {
-      try {
-        setUser(JSON.parse(saved));
-      } catch {
-        localStorage.removeItem('foe_user');
+      const saved = localStorage.getItem('foe_user')
+      if (saved) {
+        setUser(JSON.parse(saved))
       }
+    } catch {
+      localStorage.removeItem('foe_user')
     }
-  }, [user]);
-
-  // Don't auto-fetch on mount — backend doesn't have sessions
-  // User state is set during login and persists in memory
-  useEffect(() => {
+    setInitialized(true)
     setLoading(false)
   }, [])
 
