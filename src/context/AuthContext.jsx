@@ -39,6 +39,18 @@ export function AuthProvider({ children }) {
     }
   }, [])
 
+  // On mount, check if we have saved user
+  useEffect(() => {
+    const saved = localStorage.getItem('foe_user');
+    if (saved && !user) {
+      try {
+        setUser(JSON.parse(saved));
+      } catch {
+        localStorage.removeItem('foe_user');
+      }
+    }
+  }, [user]);
+
   // Don't auto-fetch on mount — backend doesn't have sessions
   // User state is set during login and persists in memory
   useEffect(() => {
@@ -55,6 +67,7 @@ export function AuthProvider({ children }) {
     const data = await res.json()
     if (!res.ok || !data.success) throw new Error(data.message || 'Login failed')
     setUser(data.member)
+    localStorage.setItem('foe_user', JSON.stringify(data.member))
     return data.member
   }
 

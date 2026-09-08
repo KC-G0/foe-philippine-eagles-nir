@@ -23,7 +23,10 @@ export default function Members() {
   }, [user, loading, navigate])
 
   if (loading) return <div className="py-20 text-center text-white/60">Loading...</div>
-  if (!user) return null
+  if (!user) {
+    navigate('/login-page', { state: { from: '/members-page' } })
+    return null
+  }
 
   const filtered = members.filter(m => {
     const search = filter.toLowerCase()
