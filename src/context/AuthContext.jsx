@@ -41,7 +41,23 @@ export function AuthProvider({ children }) {
   const logout = async () => {
     await fetch(`${API_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' })
     setUser(null)
+    localStorage.removeItem('foe_user')
   }
+
+  const fetchMe = useCallback(async () => {
+    try {
+      const res = await fetch(`${API_URL}/api/auth/me`, { credentials: 'include' })
+      if (!res.ok) throw new Error('Not authenticated')
+      const data = await res.json()
+      setUser(data.member)
+      localStorage.setItem('foe_user', JSON.stringify(data.member))
+      return data.member
+    } catch {
+      setUser(null)
+      localStorage.removeItem('foe_user')
+      return null
+    }
+  }, [])
 
   return (
     <AuthContext.Provider value={{ user, loading, login, logout, fetchMe }}>
