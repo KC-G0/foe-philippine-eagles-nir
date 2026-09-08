@@ -24,7 +24,7 @@ export default function Chatbot() {
     setLoading(true)
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/chatbot`, {
+      const res = await fetch('https://foe-philippine-eagles-nir-backend.onrender.com/api/chatbot', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ question: input })

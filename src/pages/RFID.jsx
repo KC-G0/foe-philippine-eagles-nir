@@ -32,7 +32,7 @@ export default function RFID() {
   // Load recent check-ins
   const loadCheckins = async () => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/rfid/checkins`, { credentials: 'include' });
+      const res = await fetch('https://foe-philippine-eagles-nir-backend.onrender.com/api/rfid/checkins', { credentials: 'include' });
       const data = await res.json();
       setCheckins(data.checkins || []);
     } catch (err) {
@@ -54,7 +54,7 @@ export default function RFID() {
     setTapAnimation(true);
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/rfid/tap`, {
+      const res = await fetch('https://foe-philippine-eagles-nir-backend.onrender.com/api/rfid/tap', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

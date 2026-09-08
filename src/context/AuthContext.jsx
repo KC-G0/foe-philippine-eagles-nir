@@ -8,7 +8,7 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
   const [initialized, setInitialized] = useState(false)
 
-  const API_URL = import.meta.env.VITE_API_URL || ''
+  const API_URL = import.meta.env.VITE_API_URL || 'https://foe-philippine-eagles-nir-backend.onrender.com'
 
   // Restore auth from localStorage on mount
   useEffect(() => {
